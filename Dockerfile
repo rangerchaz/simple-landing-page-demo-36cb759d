@@ -35,6 +35,7 @@ COPY --from=builder --chown=appuser:nodejs /app/backend ./backend
 
 # Copy static frontend files
 COPY --chown=appuser:nodejs frontend/ ./frontend/
+COPY designer/ ./frontend/designer/
 
 # Set user
 USER appuser
