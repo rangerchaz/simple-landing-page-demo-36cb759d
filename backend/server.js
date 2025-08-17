@@ -33,7 +33,23 @@ app.use(helmet({
 app.use(corsMiddleware);
 
 // Serve static frontend files
-app.use(express.static(path.join(__dirname, '..', 'frontend')));
+ // Fix MIME types for static files
+express.static.mime.define({
+  'text/css': ['css'],
+  'application/javascript': ['js'],
+  'image/svg+xml': ['svg']
+});
+
+// Serve static frontend files with proper MIME types
+app.use(express.static(path.join(__dirname, '..', 'frontend'), {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css');
+    } else if (path.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript');
+    }
+  }
+}));
 
 // Logging middleware
 app.use(morgan('combined', {
