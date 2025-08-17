@@ -14,6 +14,15 @@ RUN npm install --only=production && npm cache clean --force
 # Copy backend source
 COPY backend/ ./
 
+# Fix the broken config file and add static file serving
+RUN sed -i 's/healthCheck:/healthCheck: { enabled: true, endpoint: "\/health" }/' /app/backend/config/server.js
+
+# Add static file serving to server.js (before the routes section)
+RUN sed -i '/app.use.*cors/a\\n// Serve static frontend files\napp.use(express.static(path.join(__dirname, "..", "frontend")));' /app/backend/server.js
+
+# Add path require at the top
+RUN sed -i '/const express = require/a const path = require("path");' /app/backend/server.js
+
 # Production stage
 FROM node:18-alpine as production
 
@@ -42,9 +51,9 @@ USER appuser
 # Expose port
 EXPOSE 3001
 
-# Remove health check temporarily to debug startup issues
-# HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-#   CMD curl -f http://localhost:3001/health || exit 1
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3001/health || exit 1
 
 # Use dumb-init to handle signals properly
 ENTRYPOINT ["dumb-init", "--"]
