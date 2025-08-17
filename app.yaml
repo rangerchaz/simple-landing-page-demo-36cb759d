@@ -1,0 +1,128 @@
+name: simple-landing-page
+services:
+- name: frontend
+  type: static_site
+  source_dir: frontend
+  github:
+    repo: your-username/simple-landing-page
+    branch: main
+  build_command: |
+    cd frontend &&
+    npm install &&
+    npm run build
+  output_dir: /dist
+  index_document: index.html
+  error_document: index.html
+  routes:
+  - path: /
+  catchall_document: index.html
+  cors:
+    allow_origins:
+    - exact: https://your-domain.com
+    - prefix: https://
+    allow_methods:
+    - GET
+    - POST
+    - OPTIONS
+    allow_headers:
+    - Content-Type
+    - Authorization
+    - X-Requested-With
+
+- name: backend
+  type: service
+  source_dir: backend
+  github:
+    repo: your-username/simple-landing-page
+    branch: main
+  build_command: |
+    cd backend &&
+    npm install &&
+    npm run build
+  run_command: npm start
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 3001
+  routes:
+  - path: /api
+  health_check:
+    http_path: /health
+    initial_delay_seconds: 10
+    period_seconds: 10
+    timeout_seconds: 5
+    success_threshold: 1
+    failure_threshold: 3
+  envs:
+  - key: NODE_ENV
+    value: production
+    type: general
+  - key: PORT
+    value: "3001"
+    type: general
+  - key: SMTP_HOST
+    value: ${SMTP_HOST}
+    type: secret
+  - key: SMTP_PORT
+    value: ${SMTP_PORT}
+    type: secret
+  - key: SMTP_USER
+    value: ${SMTP_USER}
+    type: secret
+  - key: SMTP_PASS
+    value: ${SMTP_PASS}
+    type: secret
+  - key: CONTACT_EMAIL
+    value: ${CONTACT_EMAIL}
+    type: secret
+
+- name: demo
+  type: static_site
+  source_dir: demo
+  github:
+    repo: your-username/simple-landing-page
+    branch: main
+  build_command: |
+    cd demo &&
+    cp -r ../frontend/css . &&
+    cp -r ../frontend/js . &&
+    echo "Demo build complete"
+  output_dir: /
+  index_document: demo.html
+  error_document: demo.html
+  routes:
+  - path: /demo
+
+databases: []
+
+domains:
+- domain: your-domain.com
+  type: PRIMARY
+- domain: demo.your-domain.com
+  type: ALIAS
+
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+- rule: CPU_UTILIZATION
+  value: 80
+- rule: MEM_UTILIZATION  
+  value: 80
+
+ingress:
+  rules:
+  - match:
+      path:
+        prefix: /api
+    component:
+      name: backend
+  - match:
+      path:
+        prefix: /demo
+    component:
+      name: demo
+  - match:
+      path:
+        prefix: /
+    component:
+      name: frontend

@@ -1,0 +1,238 @@
+/* Typography System */
+
+/* Font Face Imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* Base Typography */
+:root {
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Poppins', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #1e293b;
+  font-weight: 400;
+}
+
+/* Heading Styles */
+.heading-1,
+h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 4vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+}
+
+.heading-2,
+h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.875rem, 3vw, 3rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  color: #1e293b;
+  margin-bottom: 1.25rem;
+}
+
+.heading-3,
+h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.375;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.heading-4,
+h4 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.25rem, 2vw, 1.875rem);
+  font-weight: 600;
+  line-height: 1.375;
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+}
+
+.heading-5,
+h5 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.heading-6,
+h6 {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+/* Text Sizes */
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.625;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.625;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 1.5;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 1.375;
+}
+
+/* Text Colors */
+.text-primary {
+  color: #1e293b;
+}
+
+.text-secondary {
+  color: #64748b;
+}
+
+.text-muted {
+  color: #94a3b8;
+}
+
+.text-accent {
+  color: #f59e0b;
+}
+
+.text-brand {
+  color: #2563eb;
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+/* Text Weights */
+.font-light {
+  font-weight: 300;
+}
+
+.font-normal {
+  font-weight: 400;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-extrabold {
+  font-weight: 800;
+}
+
+/* Text Alignment */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Lead Text */
+.lead {
+  font-size: 1.25rem;
+  line-height: 1.625;
+  color: #64748b;
+  margin-bottom: 1.5rem;
+}
+
+/* Small Text */
+.small {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+/* Code */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  background-color: #f1f5f9;
+  color: #e11d48;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+}
+
+/* Blockquote */
+blockquote {
+  border-left: 4px solid #2563eb;
+  padding-left: 1.5rem;
+  font-style: italic;
+  color: #64748b;
+  margin: 1.5rem 0;
+}
+
+/* Links */
+.link {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 150ms ease-in-out;
+}
+
+.link:hover {
+  color: #1d4ed8;
+}
+
+.link-subtle {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  transition: border-color 150ms ease-in-out;
+}
+
+.link-subtle:hover {
+  border-bottom-color: transparent;
+}

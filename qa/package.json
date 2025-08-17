@@ -1,0 +1,57 @@
+{
+  "name": "simple-landing-page-qa",
+  "version": "1.0.0",
+  "description": "QA testing suite for Simple Landing Page project",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:integration": "jest --testPathPattern=integration",
+    "test:unit": "jest --testPathPattern=unit",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:e2e": "cypress run",
+    "test:all": "npm run test && npm run test:e2e",
+    "test:lighthouse": "lighthouse http://localhost:3000 --output json --output-path lighthouse-report.json",
+    "test:accessibility": "axe-core --dir ./",
+    "lint": "eslint tests/",
+    "validate:html": "html-validate frontend/index.html",
+    "validate:api": "node tests/api-health-check.js"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "cypress": "^13.6.0",
+    "lighthouse": "^11.4.0",
+    "axe-core": "^4.8.3",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/dom": "^9.3.4",
+    "jsdom": "^23.0.1",
+    "eslint": "^8.56.0",
+    "html-validate": "^8.7.4",
+    "supertest": "^6.3.3",
+    "cross-env": "^7.0.3",
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"],
+    "testPathIgnorePatterns": ["<rootDir>/cypress/"],
+    "collectCoverageFrom": [
+      "frontend/js/**/*.js",
+      "!frontend/js/vendor/**",
+      "!**/node_modules/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 70,
+        "functions": 70,
+        "lines": 70,
+        "statements": 70
+      }
+    }
+  }
+}
