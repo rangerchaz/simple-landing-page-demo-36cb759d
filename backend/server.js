@@ -17,39 +17,16 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || serverConfig.port;
 
-// Security middleware
+// Security middleware - DISABLE CSP for now to allow assets
 app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:", "https:"]
-    }
-  }
+  contentSecurityPolicy: false  // <-- DISABLE THIS for now
 }));
 
 // CORS middleware
 app.use(corsMiddleware);
 
-// Serve static frontend files
- // Fix MIME types for static files
-express.static.mime.define({
-  'text/css': ['css'],
-  'application/javascript': ['js'],
-  'image/svg+xml': ['svg']
-});
-
-// Serve static frontend files with proper MIME types
-app.use(express.static(path.join(__dirname, '..', 'frontend'), {
-  setHeaders: (res, path) => {
-    if (path.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    } else if (path.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript');
-    }
-  }
-}));
+// Serve static frontend files EARLY (before other routes)
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // Logging middleware
 app.use(morgan('combined', {
@@ -65,6 +42,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Routes
 app.use('/api', contactRoutes);
 app.use('/', healthRoutes);
+
 
 // Global error handler
 app.use((error, req, res, next) => {
