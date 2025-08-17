@@ -60,4 +60,8 @@ const config = {
   },
   
   // Health check configuration
-  healthCheck:
+  healthCheck: {
+    enabled: true,
+    endpoint: '/health'
+  }
+}
