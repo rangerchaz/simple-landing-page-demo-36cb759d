@@ -18,7 +18,7 @@ COPY backend/ ./
 FROM node:18-alpine as production
 
 # Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init
+RUN apk add --no-cache dumb-init curl
 
 # Create app user
 RUN addgroup -g 1001 -S nodejs
@@ -26,6 +26,9 @@ RUN adduser -S appuser -u 1001
 
 # Set working directory
 WORKDIR /app
+
+# Create logs directory with proper permissions
+RUN mkdir -p /app/logs && chown -R appuser:nodejs /app
 
 # Copy backend files
 COPY --from=builder --chown=appuser:nodejs /app/backend ./backend
