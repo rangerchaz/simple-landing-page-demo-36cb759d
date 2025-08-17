@@ -14,13 +14,6 @@ RUN npm install --only=production && npm cache clean --force
 # Copy backend source
 COPY backend/ ./
 
-# Simple fix: just remove the broken healthCheck line entirely
-RUN sed -i '/healthCheck:/d' /app/backend/config/server.js
-
-# Add path require and static file serving to server.js
-RUN sed -i '/const express = require/a const path = require("path");' /app/backend/server.js
-RUN sed -i '/app.use.*cors/a app.use(express.static(path.join(__dirname, "..", "frontend")));' /app/backend/server.js
-
 # Production stage
 FROM node:18-alpine as production
 
