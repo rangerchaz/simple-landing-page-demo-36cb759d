@@ -60,8 +60,10 @@ const config = {
   },
   
   // Health check configuration
-  healthCheck: {
-    enabled: true,
-    endpoint: '/health'
-  }
-}
+    healthCheck: {
+      enabled: true,
+      endpoint: '/health'
+    }
+  };
+
+  module.exports = config;
