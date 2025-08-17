@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const path = require('path');
 const { corsMiddleware } = require('./middleware/cors');
 const logger = require('./utils/logger');
 const serverConfig = require('./config/server');
@@ -30,6 +31,9 @@ app.use(helmet({
 
 // CORS middleware
 app.use(corsMiddleware);
+
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // Logging middleware
 app.use(morgan('combined', {
