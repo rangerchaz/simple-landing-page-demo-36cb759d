@@ -1,20 +1,18 @@
-# Multi-stage build for production deployment
+# Multi-stage build for Node.js backend + static frontend
 FROM node:18-alpine as builder
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy backend package files first (for better caching)
+COPY backend/package*.json ./backend/
 
-# Install dependencies
+# Install backend dependencies
+WORKDIR /app/backend
 RUN npm ci --only=production && npm cache clean --force
 
-# Copy source code
-COPY . .
-
-# Build the application
-RUN npm run build 2>/dev/null || echo "No build script found"
+# Copy backend source
+COPY backend/ ./
 
 # Production stage
 FROM node:18-alpine as production
@@ -29,15 +27,11 @@ RUN adduser -S appuser -u 1001
 # Set working directory
 WORKDIR /app
 
-# Copy built application
-COPY --from=builder --chown=appuser:nodejs /app/dist ./dist
-COPY --from=builder --chown=appuser:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=appuser:nodejs /app/package.json ./package.json
+# Copy backend files
+COPY --from=builder --chown=appuser:nodejs /app/backend ./backend
 
-# Copy frontend and demo assets
+# Copy static frontend files
 COPY --chown=appuser:nodejs frontend/ ./frontend/
-COPY --chown=appuser:nodejs backend/ ./backend/
-COPY --chown=appuser:nodejs demo/ ./demo/
 
 # Set user
 USER appuser
@@ -47,10 +41,10 @@ EXPOSE 3001
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD node healthcheck.js
+  CMD curl -f http://localhost:3001/health || exit 1
 
 # Use dumb-init to handle signals properly
 ENTRYPOINT ["dumb-init", "--"]
 
-# Start the application
+# Start the Node.js backend server
 CMD ["node", "backend/server.js"]
